@@ -1,51 +1,82 @@
-<view class="container timer {{isRuning ? 'timer--runing': ''}}">
+<view class="page">
+  
 
-	<view class="timer_main">
-     <view class="timer_time-wrap">
-		 		<view class="timer_progress_mask"></view>
-		 		<view class="timer_progress timer_left">
-		 			<view class="timer_circle timer_circle--left" style="transform: rotate({{leftDeg}}deg);"></view>
-		 		</view>
-		 		<view class="timer_progress timer_right">
-		 			<view class="timer_circle timer_circle--right" style="transform: rotate({{rightDeg}}deg);"></view>
-		 		</view>
-			 	<text wx:if="{{!completed}}" class="timer_time">{{remainTimeText}}</text>
-			 	<text 
-			 		wx:if="{{isRuning}}" 
-			 		animation="{{nameAnimation}}" 
-			 		class="timer_taskName">{{taskName}}{{completed ? '已完成！' : '中'}}</text>
-		 		<image 
-		 			wx:if="{{completed}}" 
-		 			class="timer_done" 
-		 			src="../../image/complete.png"></image>
-		 </view>
-     <input 
-		 	 type="text" 
-		 	 placeholder-style="text-align:center" 
-		 	 class="timer_inputname {{isRuning  ? 'hide' : ''}}" 
-		 	 bindinput="changeLogName"
-		 	 placeholder="自定义任务名"
-			   placeholder-style="color:#bfbfbf"/>
-	</view>
-	
-	<view class="timer_footer">
-	  <view 
-	  	bindtap="startTimer" 
-	  	data-type="work" 
-	  	class="timer_ctrl {{isRuning && timerType == 'rest' ? 'hide' : ''}}">
-			{{isRuning ? '退出': '工作'}}
-			</view>
+  <!-- 主标题：专注/休息 -->
+  <view class="main-title">
+    <text>{{mode === 'work' ? '专注' : '休息'}}</text>
+  </view>
 
-	  <view 
-	  	bindtap="startTimer" 
-	  	data-type="rest" 
-	  	class="timer_ctrl_2 {{isRuning && timerType == 'work' ? 'hide' : ''}}" >
-			{{isRuning ? '退出': '休息 '}} 
-      </view>
-    <view 
-	  	bindtap="navigateToLogs" 
-	  	class="timer_ctrl_3">
-		  记录
-	    </view>
-    </view>
+  <!-- 大计时器 -->
+  <view class="timer-container">
+    <text class="timer">{{timerMinutes}}:{{timerSeconds}}</text>
+    <text class="timer-state">{{timerStateText}}</text>
+  </view>
+
+  <!-- 番茄计数 -->
+  <view class="tomato-count">
+    <text>🍅 {{tomatoCount}}</text>
+  </view>
+
+  <!-- 工作时长 / 休息时长 选项 -->
+  <!-- 工作时长选择区域 -->
+<view class="option-section">
+  <text>工作时长(分钟)</text>
+  <view class="options">
+    <block wx:for="{{workOptions}}" wx:key="index">
+      <button 
+        class="{{selectedWork === item ? 'active' : ''}}" 
+        data-value="{{item}}" 
+        bindtap="onSelectWork"
+      >{{item}}</button>
+    </block>
+    <!-- 添加自定义按钮 -->
+    <button bindtap="showWorkCustomInput">自定义</button>
+  </view>
+  
+  <!-- 自定义输入框 (条件渲染) -->
+  <view wx:if="{{showWorkCustom}}" class="custom-input">
+    <input 
+      type="number" 
+      placeholder="输入分钟数" 
+      value="{{customWorkValue}}"
+      bindinput="onWorkCustomInput"
+    />
+    <button bindtap="confirmWorkCustom">确定</button>
+    <button bindtap="cancelCustom">取消</button>
+  </view>
+</view>
+
+<!-- 休息时长选择区域 (类似结构) -->
+<view class="option-section">
+  <text>休息时长(分钟)</text>
+  <view class="options">
+    <block wx:for="{{breakOptions}}" wx:key="index">
+      <button 
+        class="{{selectedBreak === item ? 'active' : ''}}" 
+        data-value="{{item}}" 
+        bindtap="onSelectBreak"
+      >{{item}}</button>
+    </block>
+    <button bindtap="showBreakCustomInput">自定义</button>
+  </view>
+  
+  <view wx:if="{{showBreakCustom}}" class="custom-input">
+    <input 
+      type="number" 
+      placeholder="输入分钟数" 
+      value="{{customBreakValue}}"
+      bindinput="onBreakCustomInput"
+    />
+    <button bindtap="confirmBreakCustom">确定</button>
+    <button bindtap="cancelCustom">取消</button>
+  </view>
+</view>
+
+
+  <!-- 控制按钮 -->
+  <view class="controls">
+    <button class="control-btn start" bindtap="onStartPause">{{timerRunning ? '暂停' : '开始'}}</button>
+    <button class="control-btn reset" bindtap="onReset">重置</button>
+  </view>
+
 </view>

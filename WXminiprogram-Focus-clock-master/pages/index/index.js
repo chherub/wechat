@@ -1,221 +1,243 @@
-const util = require('../../utils/util.js')
-const templateId = 'OFEAr11jqhgpU_imwX6A7xTy2ckcxRMNa3kE8-d7CQI'
-const defaultLogName = {
-  work: '工作',
-  rest: '休息'
-}
-const actionName = {
-  stop: '结束',
-  start: '开始'
-}
-const initDeg = {
-  left: 45,
-  right: -45,
-}
-
 Page({
-
   data: {
-    remainTimeText: '',
-    timerType: 'work',
-    log: {},
-    completed: false,
-    isRuning: false,
-    leftDeg: initDeg.left,
-    rightDeg: initDeg.right,
-    vibison: ''
-      },
-
-  onLoad: function (options) {
+    currentTime: '12:35',
+    workOptions: [25, 30, 45],
+    breakOptions: [5, 10, 15],
+    selectedWork: 25,
+    selectedBreak: 5,
+    mode: 'work',
+    tomatoCount: 0,
+    timerRunning: false,
+    secondsLeft: 25 * 60,
+    timerMinutes: '25',
+    timerSeconds: '00',
+    timerStateText: '准备开始',
+    currentTab: 'focus',
+    intervalId: null,
+    timeUpdateInterval: null,
+    // 新增自定义时间相关状态
+    showWorkCustom: false,
+    showBreakCustom: false,
+    customWorkValue: '',
+    customBreakValue: ''
   },
+  
 
-  onShow: function() {
-    if (this.data.isRuning) return
-    let workTime = util.formatTime(wx.getStorageSync('workTime'), 'HH')
-    let restTime = util.formatTime(wx.getStorageSync('restTime'), 'HH')
+  onLoad() {
+    this.updateTimerDisplay();
+    this.updateCurrentTime();
+    // 每分钟更新一次状态栏时间
     this.setData({
-      workTime: workTime,
-      restTime: restTime,
-      remainTimeText: workTime + ':00'
-    })
+      timeUpdateInterval: setInterval(() => {
+        this.updateCurrentTime();
+      }, 60000)
+    });
   },
 
-  startTimer: function(e) {
-    let startTime = Date.now()
-    let startTimeShow = this.getTime() //（安卓与iOS时间显示不一致）转换时间为统一格式显示。
-    let isRuning = this.data.isRuning
-    let timerType = e.target.dataset.type
-    let showTime = this.data[timerType + 'Time']
-    let keepTime = showTime * 60 * 1000
-    let logName = this.logName || defaultLogName[timerType]
-    this.vibshort()
-    if (!isRuning) {   
-      this.timer = setInterval((function() {
-        this.updateTimer()
-        this.startNameAnimation()       
-      }).bind(this), 1000)
+  onUnload() {
+    this.clearTimer();
+    if (this.data.timeUpdateInterval) {
+      clearInterval(this.data.timeUpdateInterval);
+    }
+  },
+
+  // 更新当前时间
+  updateCurrentTime() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    this.setData({ currentTime: `${hours}:${minutes}` });
+  },
+
+  // 根据secondsLeft更新显示
+  updateTimerDisplay() {
+    const { secondsLeft, mode, timerRunning, selectedWork, selectedBreak } = this.data;
+    const mins = Math.floor(secondsLeft / 60).toString().padStart(2, '0');
+    const secs = Math.floor(secondsLeft % 60).toString().padStart(2, '0');
+    const total = mode === 'work' ? selectedWork * 60 : selectedBreak * 60;
+
+    let state = '';
+    if (timerRunning) {
+      state = mode === 'work' ? '专注中' : '休息中';
     } else {
-      this.stopTimer()
-    }
-   
-    this.setData({
-      isRuning: !isRuning,
-      completed: false,
-      timerType: timerType,
-      remainTimeText: showTime + ':00',
-      taskName: logName
-    
-    })
-
-    this.data.log = {
-      name: logName,
-      startTime: Date.now(),
-      startTimeShow: startTimeShow,
-      keepTime: keepTime,
-      endTime: keepTime + startTime,
-      action: actionName[isRuning ? 'stop' : 'start'],
-      type: timerType
-    }
-    this.saveLog(this.data.log)
-  },
-
-  startNameAnimation: function() {
-    let animation = wx.createAnimation({
-      duration: 450
-    })
-    animation.opacity(0.2).step()
-    animation.opacity(1).step()
-    this.setData({
-      nameAnimation: animation.export()
-    })
-  },
-
-  stopTimer: function() {
-    // reset circle progress
-    this.setData({
-      leftDeg: initDeg.left,
-      rightDeg: initDeg.right
-    })
-  this.viblong()    
-  this.timer && clearInterval(this.timer)
-  //  震动 ；clear timer
-  },
-
-viblong: function(){
-  let vibison = wx.getStorageSync('vibison')//页面传参，以缓存形式
-  this.setData({
-    vibison: vibison
-  })
-if(vibison){     //振动功能的开闭
-  wx.vibrateLong()
-}else{
-}
-},
-
-vibshort: function(){
-  let vibison = wx.getStorageSync('vibison')//页面传参，以缓存形式
-  this.setData({
-    vibison: vibison
-  })
-if(vibison){     //振动功能的开闭
-  wx.vibrateShort()
-}else{
-}
-},
-
-  updateTimer: function() {
-    let log = this.data.log
-    let now = Date.now()
-    let remainingTime = Math.round((log.endTime - now) / 1000)
-    let H = util.formatTime(Math.floor(remainingTime / (60 * 60)) % 24, 'HH')
-    let M = util.formatTime(Math.floor(remainingTime / (60)) % 60, 'MM')
-    let S = util.formatTime(Math.floor(remainingTime) % 60, 'SS')
-    let halfTime
-
-    // update text
-    if (remainingTime > 0) {
-      let remainTimeText = (H === "00" ? "" : (H + ":")) + M + ":" + S
-      this.setData({
-        remainTimeText: remainTimeText
-      })
-    } else if (remainingTime == 0) {
-      this.setData({
-        completed: true
-      })
-      this.stopTimer()
-      return
+      state = (secondsLeft === total) ? '准备开始' : '已暂停';
     }
 
-    // update circle progress
-    halfTime = log.keepTime / 2
-    if ((remainingTime * 1000) > halfTime) {
-      this.setData({
-        leftDeg: initDeg.left - (180 * (now - log.startTime) / halfTime)
-      })
+    this.setData({
+      timerMinutes: mins,
+      timerSeconds: secs,
+      timerStateText: state
+    });
+  },
+
+  // 清除计时器
+  clearTimer() {
+    if (this.data.intervalId) {
+      clearInterval(this.data.intervalId);
+      this.setData({ intervalId: null });
+    }
+  },
+
+  // 开始倒计时（总是重新启动一个新的定时器）
+  startTimer() {
+    // 如果已有定时器，先清除
+    this.clearTimer();
+    this.setData({ timerRunning: true });
+    this.updateTimerDisplay();
+
+    const intervalId = setInterval(() => {
+      let { secondsLeft, mode } = this.data;
+      secondsLeft -= 1;
+      this.setData({ secondsLeft });
+      this.updateTimerDisplay();
+
+      // 倒计时结束
+      if (secondsLeft <= 0) {
+        this.clearTimer(); // 停止当前定时器
+
+        if (mode === 'work') {
+          // 工作结束：番茄数+1，切换到休息
+          this.setData({
+            tomatoCount: this.data.tomatoCount + 1,
+            mode: 'break',
+            secondsLeft: this.data.selectedBreak * 60
+          });
+        } else {
+          // 休息结束：切换到工作
+          this.setData({
+            mode: 'work',
+            secondsLeft: this.data.selectedWork * 60
+          });
+        }
+        // 自动开始下一阶段（继续计时）
+        this.startTimer(); // 重新开启新定时器
+        this.updateTimerDisplay();
+      }
+    }, 1000);
+
+    this.setData({ intervalId });
+  },
+
+  // 暂停
+  pauseTimer() {
+    this.clearTimer();
+    this.setData({ timerRunning: false });
+    this.updateTimerDisplay();
+  },
+
+  // 重置为当前模式的完整时长
+  resetToCurrentMode() {
+    const { mode, selectedWork, selectedBreak } = this.data;
+    const secondsLeft = mode === 'work' ? selectedWork * 60 : selectedBreak * 60;
+    this.setData({ secondsLeft });
+    this.updateTimerDisplay();
+  },
+
+  // 事件：开始/暂停
+  onStartPause() {
+    if (this.data.timerRunning) {
+      this.pauseTimer();
     } else {
+      this.startTimer();
+    }
+  },
+
+  // 重置
+  onReset() {
+    this.pauseTimer();
+    this.resetToCurrentMode();
+  },
+
+  // 选择工作时长
+  onSelectWork(e) {
+    const value = e.currentTarget.dataset.value;
+    if (value === this.data.selectedWork) return;
+
+    this.setData({ selectedWork: value });
+    if (this.data.mode === 'work') {
+      this.pauseTimer();
+      this.setData({ secondsLeft: value * 60 });
+      this.updateTimerDisplay();
+    }
+  },
+
+  // 选择休息时长
+  onSelectBreak(e) {
+    const value = e.currentTarget.dataset.value;
+    if (value === this.data.selectedBreak) return;
+
+    this.setData({ selectedBreak: value });
+    if (this.data.mode === 'break') {
+      this.pauseTimer();
+      this.setData({ secondsLeft: value * 60 });
+      this.updateTimerDisplay();
+    }
+  },
+
+  // 显示工作时长自定义输入框
+  showWorkCustomInput() {
+    this.setData({
+      showWorkCustom: true,
+      showBreakCustom: false,  // 确保只显示一个自定义输入
+      customWorkValue: this.data.selectedWork.toString()
+    });
+  },
+
+  // 显示休息时长自定义输入框
+  showBreakCustomInput() {
+    this.setData({
+      showBreakCustom: true,
+      showWorkCustom: false,   // 确保只显示一个自定义输入
+      customBreakValue: this.data.selectedBreak.toString()
+    });
+  },
+
+  // 处理工作时长输入
+  onWorkCustomInput(e) {
+    this.setData({ customWorkValue: e.detail.value });
+  },
+
+  // 处理休息时长输入
+  onBreakCustomInput(e) {
+    this.setData({ customBreakValue: e.detail.value });
+  },
+
+  // 确认自定义工作时长
+  confirmWorkCustom() {
+    const value = parseInt(this.data.customWorkValue);
+    if (!isNaN(value) && value > 0 && value <= 120) {
       this.setData({
-        leftDeg: -135
-      })
+        selectedWork: value,
+        showWorkCustom: false,
+        secondsLeft: this.data.mode === 'work' ? value * 60 : this.data.secondsLeft
+      });
+      this.updateTimerDisplay();
+    } else {
+      wx.showToast({ title: '请输入1-120的整数', icon: 'none' });
+    }
+  },
+
+  // 确认自定义休息时长
+  confirmBreakCustom() {
+    const value = parseInt(this.data.customBreakValue);
+    if (!isNaN(value) && value > 0 && value <= 60) {
       this.setData({
-        rightDeg: initDeg.right - (180 * (now - (log.startTime + halfTime)) / halfTime)
-      })
+        selectedBreak: value,
+        showBreakCustom: false,
+        secondsLeft: this.data.mode === 'break' ? value * 60 : this.data.secondsLeft
+      });
+      this.updateTimerDisplay();
+    } else {
+      wx.showToast({ title: '请输入1-60的整数', icon: 'none' });
     }
   },
 
-  changeLogName: function(e) {
-    this.logName = e.detail.value
-  },
+  // 取消自定义
+  cancelCustom() {
+    this.setData({
+      showWorkCustom: false,
+      showBreakCustom: false
+    });
+  }
 
-  saveLog: function(log) {
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(log)
-    wx.setStorageSync('logs', logs)
-  },
-  onShareAppMessage: function (res) {
-
-    if (res.from ==='button') {
-      // 来自页面内转发按钮
-      console.log(res.target)
-      return {
-        title:'管理时间，保持专注！让自律成为习惯！',
-         path: '/pages/index/index',
-        imageUrl:'/image/share.jpg' //不设置则默认为当前页面的截图
-      }
-    }
-  },
-    onShareTimeline: function (res){
-        return{  
-          title: '管理时间，保持专注，让自律成为习惯！',
-          query: {   
-            // key: 'value' //要携带的参数 
-          },  
-          imageUrl: '/image/about.png'   
-        }    
-    
-      },
-
-
-    getTime(){
-      let date1=new Date();
-      let year=this.appendZero(date1.getFullYear());
-      let month=this.appendZero(date1.getMonth()+1)
-      let day=this.appendZero(date1.getDate());
-      let hours=this.appendZero(date1.getHours());
-      let minutes=this.appendZero(date1.getMinutes());
-      let seconds=this.appendZero(date1.getSeconds());
-      return year+"年 "+month+"月"+day+'日 '+"\xa0\xa0\xa0"+hours+":"+minutes+":"+seconds
-    },
-    //过滤补0
-    appendZero(obj) {
-      if (obj < 10) {
-        return "0" + obj;
-      } else {
-        return obj;
-      }
-    },
-    navigateToLogs: function() {
-      wx.navigateTo({
-        url: '/pages/logs/logs'
-      })
-    }
-})
+});
