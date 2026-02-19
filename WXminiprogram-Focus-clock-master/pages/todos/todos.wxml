@@ -1,0 +1,132 @@
+<wxs module="filter">
+  var unfinished = function(todos) {
+    var count = 0;
+    for (var i = 0; i < todos.length; i++) {
+      if (!todos[i].completed) {
+        count++;
+      }
+    }
+    return count;
+  }
+  module.exports.unfinished = unfinished;
+</wxs>
+
+<view class="container">
+  <!-- 顶部输入区 -->
+  <view class="input-card">
+    <view class="input-wrapper">
+      <input 
+        class="todo-input" 
+        placeholder="添加新任务..." 
+        value="{{input}}" 
+        bindinput="inputChangeHandle" 
+      />
+      <picker 
+        mode="date" 
+        value="{{todoDate}}" 
+        start="{{todayDate}}" 
+        bindchange="bindDateChange"
+      >
+        <view class="date-picker">{{todoDate}}</view>
+      </picker>
+    </view>
+    <button class="add-btn" bindtap="addTodoHandle">+</button>
+  </view>
+
+  <!-- 今日待办（修改后和未来待办样式一致） -->
+  <view class="section-card">
+    <view class="section-header">
+      <text class="section-title">今日待办</text>
+      <text class="section-subtitle">
+        {{todayTodos.length}} 项，{{filter.unfinished(todayTodos)}} 未完成
+      </text>
+    </view>
+    
+    <view class="todo-list" wx:if="{{todayTodos.length > 0}}">
+      <!-- 核心修改：今日待办的item结构和未来待办一致 -->
+      <view class="todo-item" wx:for="{{todayTodos}}" wx:key="id">
+        <view 
+          class="todo-checkbox {{item.completed ? 'checked' : ''}}" 
+          bindtap="toggleTodoHandle" 
+          data-type="today" 
+          data-index="{{index}}"
+        >
+          <text wx:if="{{item.completed}}" class="check-icon">✓</text>
+        </view>
+        <!-- 新增 todo-content 容器，和未来待办统一 -->
+        <view class="todo-content">
+          <text class="todo-text {{item.completed ? 'completed' : ''}}">
+            {{item.name}}
+          </text>
+          <text class="todo-date">{{item.date}}</text>
+        </view>
+        <view class="todo-actions">
+          <text 
+            class="del-btn" 
+            bindtap="removeTodoHandle" 
+            data-type="today" 
+            data-index="{{index}}"
+          >✕</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="empty-state" wx:else>
+      <text>暂无今日任务，添加一个吧 ✨</text>
+    </view>
+    
+    <view class="section-footer" wx:if="{{todayTodos.length > 0}}">
+      <text 
+        class="toggle-all" 
+        bindtap="toggleAllHandle"
+      >{{allCompleted ? '取消全选' : '全部完成'}}</text>
+    </view>
+  </view>
+
+  <!-- 未来待办（保持不变） -->
+  <view class="section-card">
+    <view class="section-header">
+      <text class="section-title">未来待办</text>
+      <text class="section-subtitle">
+        {{futureTodos.length}} 项，{{filter.unfinished(futureTodos)}} 未完成
+      </text>
+    </view>
+    
+    <view class="todo-list" wx:if="{{futureTodos.length > 0}}">
+      <view class="todo-item" wx:for="{{futureTodos}}" wx:key="id">
+        <view 
+          class="todo-checkbox {{item.completed ? 'checked' : ''}}" 
+          bindtap="toggleTodoHandle" 
+          data-type="future" 
+          data-index="{{index}}"
+        >
+          <text wx:if="{{item.completed}}" class="check-icon">✓</text>
+        </view>
+        <view class="todo-content">
+          <text class="todo-text {{item.completed ? 'completed' : ''}}">
+            {{item.name}}
+          </text>
+          <text class="todo-date">{{item.date}}</text>
+        </view>
+        <view class="todo-actions">
+          <text 
+            class="del-btn" 
+            bindtap="removeTodoHandle" 
+            data-type="future" 
+            data-index="{{index}}"
+          >✕</text>
+        </view>
+      </view>
+    </view>
+    
+    <view class="empty-state" wx:else>
+      <text>暂无未来任务，添加一个吧 ✨</text>
+    </view>
+  </view>
+
+  <!-- 底部操作栏 -->
+  <view class="footer-bar">
+    <text class="footer-text">总未完成：{{leftCount}}</text>
+    <text class="clear-btn" bindtap="clearCompletedHandle">清除已完成</text>
+  </view>
+</view>

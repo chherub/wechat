@@ -1,0 +1,218 @@
+page {
+  background-color: #f2f2f7;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #1d1d1f;
+  line-height: 1.47;
+}
+
+.container {
+  padding: 24rpx;
+  max-width: 750rpx;
+  margin: 0 auto;
+}
+
+/* 顶部输入卡片 */
+.input-card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  margin-bottom: 32rpx;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.input-wrapper {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.todo-input {
+  flex: 1;
+  height: 80rpx;
+  font-size: 32rpx;
+  color: #1d1d1f;
+  padding: 0;
+  border: none;
+  outline: none;
+}
+
+.date-picker {
+  font-size: 28rpx;
+  color: #007aff;
+  padding: 8rpx 16rpx;
+  background-color: #f2f2f7;
+  border-radius: 8rpx;
+}
+
+.add-btn {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  background-color: #007aff;
+  color: #ffffff;
+  font-size: 40rpx;
+  line-height: 80rpx;
+  text-align: center;
+  padding: 0;
+  border: none;
+  box-shadow: 0 4rpx 12rpx rgba(0, 122, 255, 0.3);
+}
+
+/* 通用卡片样式 */
+.section-card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 32rpx;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.section-header {
+  margin-bottom: 24rpx;
+}
+
+.section-title {
+  font-size: 36rpx;
+  font-weight: 600;
+  color: #1d1d1f;
+  display: block;
+  margin-bottom: 8rpx;
+}
+
+.section-subtitle {
+  font-size: 28rpx;
+  color: #86868b;
+}
+
+/* 任务列表 */
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16rpx;
+}
+
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 20rpx;
+  padding: 20rpx 0;
+  border-bottom: 1rpx solid #f2f2f7;
+}
+
+
+.todo-item:last-child {
+  border-bottom: none;
+}
+
+.todo-checkbox {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 50%;
+  border: 2rpx solid #c7c7cc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.todo-checkbox.checked {
+  background-color: #34c759;
+  border-color: #34c759;
+}
+
+.check-icon {
+  color: #ffffff;
+  font-size: 24rpx;
+  font-weight: bold;
+}
+
+.todo-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8rpx;
+}
+
+.todo-text {
+  font-size: 32rpx;
+  color: #1d1d1f;
+}
+
+.todo-text.completed {
+  color: #86868b;
+  text-decoration: line-through;
+}
+
+.todo-date {
+  font-size: 24rpx;
+  color: #86868b;
+}
+
+.todo-actions {
+  flex-shrink: 0;
+}
+
+.del-btn {
+  font-size: 28rpx;
+  color: #ff3b30;
+  padding: 8rpx;
+}
+
+/* 空状态 */
+.empty-state {
+  text-align: center;
+  padding: 40rpx 0;
+  color: #86868b;
+  font-size: 28rpx;
+}
+
+/* 底部操作 */
+.section-footer {
+  margin-top: 24rpx;
+  text-align: right;
+}
+
+.toggle-all {
+  font-size: 28rpx;
+  color: #007aff;
+}
+
+.footer-bar {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.04);
+}
+
+.footer-text {
+  font-size: 28rpx;
+  color: #1d1d1f;
+  font-weight: 500;
+}
+
+.clear-btn {
+  font-size: 28rpx;
+  color: #ff3b30;
+  background: transparent;
+  border: none;
+  padding: 0;
+  width: auto;
+  display: block;
+  text-align: right;
+  padding-left: 0;
+  padding-right: 0;
+  appearance: none;
+  margin: 0;
+  touch-action: manipulation;
+  transition: none !important;
+}
+
+.clear-btn:active {
+  transform: none !important;
+}
