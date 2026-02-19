@@ -1,194 +1,208 @@
-page{
-  background-color: #ffffff;
-}
-.container {
+.page {
   display: flex;
-  height: 100%;
   flex-direction: column;
-  overflow: hidden;
-  background-color: #ffffff; 
-
+  min-height: 100vh;
+  background-color: #ffffff;
+  padding: 0 24rpx;
+  box-sizing: border-box;
 }
 
-.timer_main {
-  position: relative;
+.status-bar {
   display: flex;
-  flex: 2;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  text-align: center;
-  /* background-color: #3697e6; 主页底色 */
-  transition: all .5s;
-  z-index: 1;
-  padding: 10px 0;
-  background:linear-gradient(#217dc9,#feffff); /*渐变色*/
+  padding: 20rpx 0 10rpx;
+  color: #333;
+  font-size: 28rpx;
+  font-weight: 500;
+}
+.status-icons text {
+  margin-left: 12rpx;
 }
 
-.timer_time-wrap {
-  position: relative;
+.main-title {
+  text-align: center;
+  font-size: 36rpx;
+  color: #ff7b5c;
+  font-weight: 600;
+  margin: 10rpx 0 20rpx;
+}
+
+.timer-container {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  width: 150px;
-  height: 150px;
-  text-align: center;
-  transition: all .3s;
+  margin: 30rpx 0 10rpx;
 }
-
-.timer_progress {
-  position: absolute;
-  top: 0;
-  width: 75px;
-  height: 150px;
-  overflow: hidden;
-  transition: all .3s;
+.timer {
+  font-size: 140rpx;
+  font-weight: 700;
+  font-family: 'Courier New', monospace;
+  color: #2c3e50;
+  line-height: 1.2;
 }
-
-.timer_progress_mask {
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  border: 3px solid #338fdb00;
-  opacity: .5;
-  border-radius: 50%;
-}
-
-.timer_left {
-  left: 0;
-}
-
-.timer_right {
-  right: 0;
-}
-
-.timer_circle {
-  position: absolute;
-  top: 0;
-  width: 150px;
-  height: 150px;
-  border: 3px solid transparent;
-  border-radius: 50%;
-  transition: all .3s;
-}
-
-.timer_circle--left {
-  left: 0;
-  border-left: 3px solid #fff;
-  border-bottom: 3px solid #fff;
-  transform: rotate(45deg);
-}
-
-.timer_circle--right {
-  right: 0;
-  border-right: 3px solid #fff;
-  border-bottom: 3px solid #fff;
-  transform: rotate(-45deg);
-}
-/* 
-.timer_time-right {} */
-
-.timer_time {
-  font-size: 40px;
-  color: #fff;
-  font-weight: lighter;
-  transition: font-size .3s;
-}
-
-.timer_taskName {
-  position: absolute;
-  top: -100px;
-  font-size: 14px;
-  letter-spacing: 5px;
-  color: #fff;
-}
-
-.timer_done {
-  width: 64px;
-  height: 64px;
-}
-
-.timer_inputname {
-  position: absolute;
-  top: 100px;
-  width: 50%;
-  text-align: center;
-  height: 40px;
-  color: #cfcfcf;
-  border-radius: 10px;
-  /* background: #efefef; */
-  box-shadow: inset 3px 3px 7px #d2d2d2, inset -5px -5px 5px #ffffff;
-}
-
-.timer_footer {
-  display: flex; /* 关键：启用flex布局 */
-  justify-content: space-around; /* 均匀分布按钮 */
-  align-items: center; /* 垂直居中 */
-  width: 100%;
-  margin-top: 20rpx;
-}
-
-.timer_ctrl,
-.timer_ctrl_2,
-.timer_ctrl_3 {
-  width: 20%; /* 统一宽度 */
-  height: 80rpx;
-  border-radius: 40rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.timer-state {
   font-size: 32rpx;
+  color: #95a5a6;
+  margin-top: 10rpx;
+}
+
+.tomato-count {
+  text-align: center;
+  font-size: 36rpx;
+  color: #e67e22;
+  margin: 15rpx 0 30rpx;
+  font-weight: 500;
+}
+
+.options {
+  background-color: #f1f3f5;
+  border-radius: 32rpx;
+  padding: 30rpx 24rpx;
+  margin-bottom: 40rpx;
+}
+.option-group {
+  margin-bottom: 30rpx;
+}
+.option-group:last-child {
+  margin-bottom: 0;
+}
+.option-label {
+  font-size: 28rpx;
+  color: #7f8c8d;
+  margin-bottom: 20rpx;
+  display: block;
+}
+.option-buttons {
+  display: flex;
+  gap: 20rpx;
+}
+.option-button {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 60rpx;
+  padding: 20rpx 0;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #34495e;
+  box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.05);
+  transition: all 0.2s;
+}
+.option-button.selected {
+  background-color: #ff7b5c;
+  color: white;
+}
+.option-button text {
+  font-size: 28rpx;
+}
+
+.controls {
+  display: flex;
+  justify-content: center;
+  gap: 30rpx;
+  margin: 20rpx 0 50rpx;
+}
+.control-btn {
+  width: 240rpx;
+  height: 88rpx;
+  border-radius: 60rpx;
+  font-size: 32rpx;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   box-shadow: 0 4rpx 12rpx rgba(0,0,0,0.1);
 }
-
-.timer_ctrl {
-  background-color: #4A90E2; /* 工作按钮颜色 */
+.control-btn.start {
+  background-color: #2ecc71;
   color: white;
 }
-
-.timer_ctrl_2 {
-  background-color: #50E3C2; /* 休息按钮颜色 */
-  color: #333;
+.control-btn.reset {
+  background-color: #ecf0f1;
+  color: #34495e;
+}
+button::after {
+  border: none;
 }
 
-.timer_ctrl_3 {
-  background-color: #F5A623; /* 记录按钮颜色 */
+.footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 24rpx 0;
+  border-top: 2rpx solid #edf2f7;
+  margin-top: auto;
+}
+.footer-item {
+  font-size: 32rpx;
+  font-weight: 500;
+  color: #95a5a6;
+  padding: 8rpx 24rpx;
+  border-radius: 40rpx;
+  transition: 0.2s;
+}
+.footer-item.active {
+  color: #ff7b5c;
+  background-color: #fee9e5;
+}
+
+.custom-time {
+  margin: 20rpx;
+  padding: 20rpx;
+  background-color: #f5f5f5;
+  border-radius: 10rpx;
+}
+
+.custom-time input {
+  margin: 10rpx 0;
+  padding: 10rpx;
+  border: 1rpx solid #ccc;
+  border-radius: 5rpx;
+}
+
+.custom-time button {
+  margin-top: 20rpx;
+  padding: 10rpx 20rpx;
+  background-color: #007AFF;
   color: white;
+  border-radius: 5rpx;
 }
 
-/* .timer .timer_ctrl text {} */
+/* 选项容器样式 */
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 15rpx;
+}
 
+/* 自定义输入区域 */
+.custom-input {
+  display: flex;
+  align-items: center;
+  margin-top: 20rpx;
+  padding: 20rpx;
+  background: #f9f9f9;
+  border-radius: 12rpx;
+}
 
-/*runing style*/
-
-.timer--runing .timer_main {
+.custom-input input {
   flex: 1;
+  height: 70rpx;
+  padding: 0 20rpx;
+  background: white;
+  border: 1rpx solid #eee;
+  border-radius: 8rpx;
 }
 
-.timer--runing .timer_time {
-  font-size: 45px;
-}
-
-.timer--runing .timer_time-wrap {
-  width: 200px;
-  height: 200px;
-}
-
-.timer--runing .timer_progress {
-  width: 100px;
-  height: 200px;
-}
-
-.timer--runing .timer_circle {
-  width: 200px;
-  height: 200px;
-}
-
-.timer--runing .timer_footer {
-  flex: 0;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  z-index: 10;
+.custom-input button {
+  margin-left: 15rpx;
+  padding: 0 25rpx;
+  height: 70rpx;
+  line-height: 70rpx;
+  background: #4a8cff;
+  color: white;
+  border-radius: 8rpx;
 }
