@@ -1,32 +1,29 @@
-# 微信开发者工具本地私有配置（绝对不能提交！）
+# 微锟脚匡拷锟斤拷锟竭癸拷锟竭憋拷锟斤拷私锟斤拷锟斤拷锟矫ｏ拷锟斤拷锟皆诧拷锟斤拷锟结交锟斤拷锟斤拷
 project.private.config.json
 
-# 微信开发者工具缓存与备份
+# 微锟脚匡拷锟斤拷锟竭癸拷锟竭伙拷锟斤拷锟诫备锟斤拷
 project.config.json.bak
 .sitemap.json
 
-# 编辑器配置与缓存
+# 锟洁辑锟斤拷锟斤拷锟斤拷锟诫缓锟斤拷
 .idea/
 .vscode/
 *.swp
 *.swo
 *~
 
-# 依赖与构建产物
+# 锟斤拷锟斤拷锟诫构锟斤拷锟斤拷锟斤拷
 node_modules/
 miniprogram_npm/
 unpackage/
 dist/
 
-# 日志与临时文件
-logs/
-*.log
 
-# 系统文件
+# 系统锟侥硷拷
 .DS_Store
 Thumbs.db
 
-# 环境变量与敏感信息
+# 锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷锟斤拷息
 .env
 .env.local
 .env.*.local
