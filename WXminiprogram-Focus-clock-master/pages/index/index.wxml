@@ -2,7 +2,7 @@
   
 
   <!-- 主标题：专注/休息 -->
-  <view class="main-title">
+  <view class="main-title" style="margin-top: 100px">
     <text>{{mode === 'work' ? '专注' : '休息'}}</text>
   </view>
 
@@ -19,9 +19,9 @@
 
   <!-- 工作时长 / 休息时长 选项 -->
   <!-- 工作时长选择区域 -->
-<view class="option-section">
+  <view class="option-section" style="margin-top: 50rpx" >
   <text>工作时长(分钟)</text>
-  <view class="options">
+  <view class="options" >
     <block wx:for="{{workOptions}}" wx:key="index">
       <button 
         class="{{selectedWork === item ? 'active' : ''}}" 
@@ -47,9 +47,9 @@
 </view>
 
 <!-- 休息时长选择区域 (类似结构) -->
-<view class="option-section">
+<view class="option-section" style="margin-top: 50rpx">
   <text>休息时长(分钟)</text>
-  <view class="options">
+  <view class="options" >
     <block wx:for="{{breakOptions}}" wx:key="index">
       <button 
         class="{{selectedBreak === item ? 'active' : ''}}" 
@@ -74,9 +74,10 @@
 
 
   <!-- 控制按钮 -->
-  <view class="controls">
+  <view class="controls" style="margin-top: 30rpx">
     <button class="control-btn start" bindtap="onStartPause">{{timerRunning ? '暂停' : '开始'}}</button>
     <button class="control-btn reset" bindtap="onReset">重置</button>
   </view>
 
+  
 </view>

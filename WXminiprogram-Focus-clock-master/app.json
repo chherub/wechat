@@ -9,9 +9,7 @@
     "pages/setting/rank/rank",
     "pages/setting/setmore/setmore",
     "pages/about/about",
-    "pages/more/more",
     "pages/todos/todos",
-    "pages/poster/poster",
     "pages/version/version"
   ],
   "navigateToMiniProgramAppIdList": [
